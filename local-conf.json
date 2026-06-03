@@ -13,8 +13,8 @@
   "intersect-hierarchy": {
     "organization": "ornl",
     "facility": "intersect",
-    "system": "dial-system",
-    "subsystem": "dial-subsystem",
-    "service": "dial-service"
+    "system": "dial-transformer-system",
+    "subsystem": "dial-transformer-subsystem",
+    "service": "dial-transformer-service"
   }
 }
