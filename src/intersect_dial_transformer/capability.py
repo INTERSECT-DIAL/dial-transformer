@@ -29,9 +29,11 @@ class DialTransformerCapability(IntersectBaseCapabilityImplementation):
         self._transformer = Transformer(params)
 
     @intersect_message
-    def calculate_bounds(self, params: CalculateBoundsParams) -> None:
+    def calculate_bounds(self, params: CalculateBoundsParams) -> list[list[float]]:
         transformer = self._require_initialized_transformer()
-        params.output_bounds = transformer.calculate_bounds(params.input_bounds, params.type)
+        output_bounds = transformer.calculate_bounds(params.input_bounds, params.type)
+        params.output_bounds = output_bounds
+        return output_bounds
 
     @intersect_message
     def transform(self, params: TransformParams) -> TransformResult:
