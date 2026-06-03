@@ -21,6 +21,15 @@ services:
       start_period: 10s
       timeout: 10s
 
+  dial-transformer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      broker:
+        condition: service_healthy
+    restart: unless-stopped
+
   # Currently not needed for this microservice
   #minio:
   #image: "bitnami/minio:2024.6.4"

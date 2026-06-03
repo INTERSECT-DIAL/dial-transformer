@@ -5,10 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 authors = [{ name = "Lance Drane", email = "dranelt@ornl.gov" }]
 requires-python = ">=3.10"
-dependencies = ["intersect-sdk>=0.9.1,<0.10.0"]
+dependencies = [
+  "pydantic>=2.0.0,<3.0.0",
+  "intersect-sdk>=0.9.1,<0.10.0"
+]
 
 [dependency-groups]
-dev = ["codespell>=2.4.2", "mypy>=2.1.0", "pre-commit>=4.6.0", "ruff==0.12.7"]
+dev = ["codespell>=2.4.2", "mypy>=2.1.0", "pre-commit>=4.6.0", "pytest>=8.4.2", "ruff==0.12.7"]
 
 [build-system]
 requires = ["uv_build>=0.10.11,<0.11.0"]

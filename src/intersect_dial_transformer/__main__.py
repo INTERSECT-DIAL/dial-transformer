@@ -44,9 +44,9 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
     # IMPORTANT: import this after logging configuration
-    from .capability import TransformerCapability
+    from .capability import DialTransformerCapability
 
-    capability = TransformerCapability()
+    capability = DialTransformerCapability()
 
     service = IntersectService([capability], config)
     default_intersect_lifecycle_loop(
