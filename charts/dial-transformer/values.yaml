@@ -1,0 +1,151 @@
+# global values used by this chart
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+  kubeVersion: ""
+
+### Generic Kubernetes parameters ###
+
+kubeVersion: ""
+nameOverride: ""
+fullnameOverride: ""
+namespaceOverride: ""
+commonLabels: {}
+commonAnnotations: {}
+extraDeploy: []
+
+podSecurityContext:
+  enabled: false
+  fsGroup: 1001
+containerSecurityContext:
+  enabled: false
+  runAsUser: 1001
+  runAsNonRoot: true
+  readOnlyRootFilesystem: false
+
+podLabels: {}
+podAnnotations: {}
+podAffinityPreset: ""
+podAntiAffinityPreset: soft
+
+### Pod Disruption Budget, Autoscaling, and Node Affinity ###
+
+pdb:
+  create: false
+  minAvailable: 1
+  maxUnavailable: ""
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ""
+
+nodeAffinityPreset:
+  type: ""
+  key: ""
+  values: []
+
+affinity: {}
+nodeSelector: {}
+tolerations: []
+updateStrategy:
+  type: RollingUpdate
+priorityClassName: ""
+topologySpreadConstraints: []
+schedulerName: ""
+terminationGracePeriodSeconds: ""
+lifecycleHooks: {}
+extraEnvVars: []
+extraEnvVarsCM: ""
+extraEnvVarsSecret: ""
+extraVolumeMounts: []
+initContainers: []
+sidecars: []
+
+### Replica Count ###
+
+replicaCount: 1
+
+### Dial Transformer Service Configuration ###
+
+dialTransformer:
+  ### container image - uses GitHub Container Registry
+  image:
+    registry: ghcr.io
+    repository: "intersect-dial/dial-transformer"
+    tag: "0.1.2"
+    digest: ""
+    pullPolicy: ""
+    pullSecrets: []
+
+  ### Configuration file (local-conf.json)
+  ### This will be mounted at /app/local-conf.docker.json
+  configFile: |
+    {
+      "intersect": {
+        "brokers": [
+          {
+            "username": "intersect_username",
+            "password": "intersect_password",
+            "host": "broker",
+            "port": 5672,
+            "protocol": "amqp0.9.1"
+          }
+        ]
+      },
+      "intersect-hierarchy": {
+        "organization": "ornl",
+        "facility": "intersect",
+        "system": "dial-transformer-system",
+        "subsystem": "dial-transformer-subsystem",
+        "service": "dial-transformer-service"
+      }
+    }
+
+  ### Provide an existing secret with key (local-conf.json)
+  ### NOTE: when this option is applied, the chart does not create the secret
+  configFileExistingSecret: ""
+
+  diagnosticMode:
+    enabled: false
+    command:
+      - sleep
+    args:
+      - infinity
+
+  extraContainerPorts: []
+
+  resources:
+    limits: {}
+    requests: {}
+
+  command: []
+  args: []
+  hostAliases: []
+
+  ### Environment variables for Dial Transformer service
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+
+### Service Account Configuration ###
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: true
+
+### INTERSECT Configuration for Dial Transformer ###
+
+intersectConfig:
+  brokers: []
+  hierarchy:
+    organization: "ornl"
+    facility: "intersect"
+    system: "dial-transformer-system"
+    subsystem: "dial-transformer-subsystem"
+    service: "dial-transformer-service"
