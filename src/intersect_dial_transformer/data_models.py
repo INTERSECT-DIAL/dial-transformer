@@ -70,17 +70,29 @@ class TransformParams(BaseModel):
     """Input payload for transform."""
 
     values: Annotated[
-        list[float],
+        list[float] | None,
         Field(min_length=1, description='Values to transform.'),
-    ]
+    ] = None
+    labx: float | None = Field(default=None, description='Optional x coordinate input.')
+    labz: float | None = Field(default=None, description='Optional z coordinate input.')
+
+    @model_validator(mode='after')
+    def validate_values_or_coordinates(self) -> 'TransformParams':
+        if self.values is not None:
+            return self
+        if self.labx is None or self.labz is None:
+            msg = 'transform requires either values or both labx and labz'
+            raise ValueError(msg)
+        self.values = [self.labx, self.labz]
+        return self
 
 
 class TransformResult(BaseModel):
     """Output payload from transform."""
 
     transformed_values: Annotated[
-        list[list[float]],
-        Field(min_length=1, description='Transformed values as nested vectors.'),
+        list[float],
+        Field(min_length=1, description='Transformed values vector.'),
     ]
 
 
@@ -100,4 +112,6 @@ class InverseTransformResult(BaseModel):
         list[float],
         Field(min_length=1, description='Recovered source values.'),
     ]
+    labx: float
+    labz: float
     score: float

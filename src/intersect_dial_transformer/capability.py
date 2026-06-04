@@ -22,6 +22,7 @@ class DialTransformerCapability(IntersectBaseCapabilityImplementation):
     intersect_sdk_capability_name = 'dial_transformer'
 
     def __init__(self) -> None:
+        super().__init__()
         self._transformer: Transformer | None = None
 
     @intersect_message
@@ -38,14 +39,20 @@ class DialTransformerCapability(IntersectBaseCapabilityImplementation):
     @intersect_message
     def transform(self, params: TransformParams) -> TransformResult:
         transformer = self._require_initialized_transformer()
+        if params.values is None:
+            msg = 'transform requires values or coordinate inputs'
+            raise ValueError(msg)
         transformed_values = transformer.transform(params.values)
-        return TransformResult(transformed_values=[transformed_values])
+        return TransformResult(transformed_values=transformed_values)
 
     @intersect_message
     def inverse_transform(self, params: InverseTransformParams) -> InverseTransformResult:
         transformer = self._require_initialized_transformer()
         values = transformer.inverse_transform(params.transformed_values)
-        return InverseTransformResult(values=values, score=1.0)
+        if len(values) < 2:
+            msg = 'inverse_transform expected at least 2 values for labx/labz'
+            raise ValueError(msg)
+        return InverseTransformResult(values=values, labx=values[0], labz=values[1], score=1.0)
 
     def _require_initialized_transformer(self) -> Transformer:
         if self._transformer is None:
