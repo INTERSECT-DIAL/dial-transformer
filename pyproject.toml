@@ -14,7 +14,7 @@ dependencies = [
 dev = ["codespell>=2.4.2", "mypy>=2.1.0", "pre-commit>=4.6.0", "pytest>=8.4.2", "ruff==0.12.7"]
 
 [build-system]
-requires = ["uv_build>=0.10.11,<0.11.0"]
+requires = ["uv_build>=0.10.11,<1.0.0"]
 build-backend = "uv_build"
 
 [tool.ruff]
