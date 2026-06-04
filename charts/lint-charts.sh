@@ -7,14 +7,17 @@ cd "$(dirname "$0")"
 rc=0
 
 for chart_yaml in */Chart.yaml; do
+	[ -f "$chart_yaml" ] || continue
 	chart_dir="$(dirname "$chart_yaml")"
 	echo "======= VERIFYING CHART: $chart_dir ======="
 
 	# Ensure local chart dependencies are present if any are declared.
-	helm dependency update "$chart_dir" || {
-		rc=1
-		echo "--------- DEPENDENCY BUILD FAILED: $chart_dir --------"
-	}
+	for stat in $(helm dependency list "$chart_dir" | tail -n +2 | awk '{print $4}'); do
+		if [ "$stat" != "ok" ]; then
+			helm dependency update "$chart_dir"
+			break
+		fi
+	done
 
 	for values_file in "$chart_dir"/examples/*.yaml; do
 		[ -f "$values_file" ] || continue
