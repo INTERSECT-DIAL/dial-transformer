@@ -25,6 +25,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: dial-transformer
+    environment:
+      DIAL_TRANSFORMER_CONFIG_FILE: /local-conf.docker.json
+    volumes:
+      - ./local-conf.docker.json:/local-conf.docker.json:ro
     depends_on:
       broker:
         condition: service_healthy
