@@ -1,3 +1,7 @@
+# Helm chart artifacts
+charts/*/charts/*.tgz
+charts/*/Chart.lock
+
 # Python-generated files
 __pycache__/
 *.py[oc]

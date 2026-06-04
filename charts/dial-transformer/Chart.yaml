@@ -1,0 +1,8 @@
+apiVersion: v2
+name: dial-transformer
+description: "DIAL Transformer: An INTERSECT service that provides data transformation capabilities for DIAL active learning workflows"
+version: 0.1.2
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    version: "^2.9.1"
