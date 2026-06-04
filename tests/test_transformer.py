@@ -77,8 +77,10 @@ def test_capability_initializes_and_uses_transformer() -> None:
     transformed = capability.transform(TransformParams(values=[3.0, 8.0]))
     inverse = capability.inverse_transform(InverseTransformParams(transformed_values=[14.0, 5.0]))
 
-    assert transformed.transformed_values == [[14.0, 5.0]]
+    assert transformed.transformed_values == [14.0, 5.0]
     assert inverse.values == pytest.approx([3.0, 8.0])
+    assert inverse.labx == pytest.approx(3.0)
+    assert inverse.labz == pytest.approx(8.0)
     assert inverse.score == 1.0
 
 
