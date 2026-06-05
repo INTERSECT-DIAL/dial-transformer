@@ -16,11 +16,15 @@ def test_linear_transform_applies_expected_formula() -> None:
 
     transformed = transformer.transform([4.0, 8.0])
 
-    assert transformed == [18.0, 1.0]
+    # transform: (value / bin_size) - (origin / bin_size)
+    # [4/2 - 10/2, 8/0.5 - (-3)/0.5] = [-3.0, 22.0]
+    assert transformed == [-3.0, 22.0]
 
 
 def test_linear_inverse_transform_round_trip_recovers_inputs() -> None:
-    params = InitializeTransformParams(origins=[1.0, -10.0, 5.5], bin_sizes=[2.0, 4.0, 0.25], type='linear')
+    params = InitializeTransformParams(
+        origins=[1.0, -10.0, 5.5], bin_sizes=[2.0, 4.0, 0.25], type='linear'
+    )
     transformer = Transformer(params)
     original_values = [7.0, 2.0, -3.0]
 
@@ -74,10 +78,14 @@ def test_capability_initializes_and_uses_transformer() -> None:
     init_params = InitializeTransformParams(origins=[2.0, 1.0], bin_sizes=[4.0, 0.5], type='linear')
 
     capability.initialize_transform(init_params)
+    # transform: (value / bin_size) - (origin / bin_size)
+    # [3/4 - 2/4, 8/0.5 - 1/0.5] = [0.25, 14.0]
     transformed = capability.transform(TransformParams(values=[3.0, 8.0]))
-    inverse = capability.inverse_transform(InverseTransformParams(transformed_values=[14.0, 5.0]))
+    # inverse_transform: bin_size * value + origin
+    # [4*0.25 + 2, 0.5*14 + 1] = [3.0, 8.0]
+    inverse = capability.inverse_transform(InverseTransformParams(transformed_values=[0.25, 14.0]))
 
-    assert transformed.transformed_values == [14.0, 5.0]
+    assert transformed.transformed_values == [0.25, 14.0]
     assert inverse.values == pytest.approx([3.0, 8.0])
     assert inverse.labx == pytest.approx(3.0)
     assert inverse.labz == pytest.approx(8.0)
@@ -108,7 +116,9 @@ def test_capability_calculate_bounds_with_linear_bin_sizes() -> None:
 
 def test_capability_calculate_bounds_linear_from_num_bins_on_log_transformer() -> None:
     capability = DialTransformerCapability()
-    init_params = InitializeTransformParams(origins=[1.0, 2.0], num_bins=[10, 6], type='logarithmic')
+    init_params = InitializeTransformParams(
+        origins=[1.0, 2.0], num_bins=[10, 6], type='logarithmic'
+    )
     bounds_params = CalculateBoundsParams(
         input_bounds=[[10.0, 30.0], [100.0, 130.0]],
         output_bounds=[[0.0, 0.0], [0.0, 0.0]],
