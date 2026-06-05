@@ -31,7 +31,9 @@ class Transformer:
         msg = f'Unsupported transform type: {params.type}'
         raise ValueError(msg)
 
-    def calculate_bounds(self, input_bounds: list[list[float]], bounds_type: str) -> list[list[float]]:
+    def calculate_bounds(
+        self, input_bounds: list[list[float]], bounds_type: str
+    ) -> list[list[float]]:
         """Compute normalized grid-aligned bounds from an incoming bounding box."""
         self._validate_input_length(input_bounds)
 

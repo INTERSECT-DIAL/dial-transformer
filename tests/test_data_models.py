@@ -101,10 +101,10 @@ def test_calculate_bounds_params_rejects_non_list_bounds() -> None:
 
 def test_transform_models_validate_successfully() -> None:
     params = TransformParams(values=[1.0, 2.0])
-    result = TransformResult(transformed_values=[4.0, 5.0, 6.0, 7.0])
+    result = TransformResult(transformed_values=[4.0, 5.0])
 
     assert params.values == [1.0, 2.0]
-    assert result.transformed_values == [4.0, 5.0, 6.0, 7.0]
+    assert result.transformed_values == [4.0, 5.0]
 
 
 def test_transform_models_reject_invalid_next_x() -> None:
